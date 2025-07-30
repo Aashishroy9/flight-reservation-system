@@ -29,9 +29,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getServletPath();
-        if (path.startsWith("/api/auth/")) {
+
+        // Skip JWT for public endpoints
+        if (path.startsWith("/api/auth/")
+                || path.equals("/api/flights")
+                || path.startsWith("/api/flights/search")) {
             filterChain.doFilter(request, response);
-            return; // ✅ Skip JWT for register/login
+            return;
         }
 
         String authHeader = request.getHeader("Authorization");
@@ -51,6 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(
                                 userDetails, null, userDetails.getAuthorities()
                         );
+
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

@@ -34,9 +34,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/flights/search").permitAll() // ✅ Make search public
-                        .requestMatchers("/api/flights").permitAll() // Optional: allow listing flights
-                        .requestMatchers("/api/flights/add", "/api/flights/{id}").hasRole("ADMIN") // Admin-only
+                        .requestMatchers("/api/flights/search").permitAll()
+                        .requestMatchers("/api/flights").permitAll()
+                        .requestMatchers("/api/flights/add", "/api/flights/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
